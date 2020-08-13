@@ -33,6 +33,10 @@ const Paths = {
   js: {
     src: 'source/js/main.js',
     dest: 'build/js/'
+  },
+  assets: {
+    src: ['source/assets/**/*.*', '!source/assets/**/*.md'],
+    dest: 'build/'
   }
 };
 
@@ -104,6 +108,14 @@ gulp.task('scripts', () =>
 
 
 
+// Copy \\
+gulp.task('copy', () =>
+  gulp.src(Paths.assets.src)
+    .pipe(gulp.dest(Paths.assets.dest))
+);
+
+
+
 // Server \\
 gulp.task('server', () =>
   server.init({
@@ -131,7 +143,7 @@ gulp.task('watch', () => {
 
 
 // Build \\
-gulp.task('build', gulp.series('clean', gulp.parallel('img:sprite', 'styles', 'img', 'scripts'), 'img:webp', 'pug'));
+gulp.task('build', gulp.series('clean', gulp.parallel('img:sprite', 'styles', 'img', 'scripts', 'copy'), 'img:webp', 'pug'));
 
 // Dev \\
 gulp.task('dev', gulp.series('build', gulp.parallel('server', 'watch')));
