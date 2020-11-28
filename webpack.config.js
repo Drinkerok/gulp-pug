@@ -3,7 +3,8 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
   context: path.resolve(__dirname, 'source'),
-  mode: 'development', // Режим сборки
+  mode: process.env.NODE_ENV, // Режим сборки
+  // mode: 'production', // для дев режима для IE
   entry: {
     main: './js/main.js',
   }, // Точка входа приложения

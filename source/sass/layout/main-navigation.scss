@@ -1,0 +1,16 @@
+.main-navigation__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 -10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.main-navigation__item {
+  margin: 0 10px;
+}
+
+.main-navigation__link {
+  display: block;
+}

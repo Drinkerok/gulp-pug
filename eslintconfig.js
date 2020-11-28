@@ -9,5 +9,8 @@ module.exports = {
       'functions': 'never',
     }],
     'quotes': ['error', 'single'],
+    'object-curly-spacing': ['error', 'always'],
+    'space-before-function-paren': ['error', 'always'],
+    'radix': ['error', 'as-needed'],
   },
 };

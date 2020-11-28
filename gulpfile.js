@@ -7,12 +7,13 @@ const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const webpackStream = require('webpack-stream');
 const webpackConfig = require('./webpack.config.js');
-const server = require("browser-sync").create();
+const server = require('browser-sync').create();
 
 const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 const Paths = {
   pug: {
+    base: 'source/pug/**/*.pug',
     src: 'source/pug/*.pug',
     dest: 'build/'
   },
@@ -31,6 +32,7 @@ const Paths = {
     dest: 'build/svg/'
   },
   js: {
+    base: 'source/js/**/*.js',
     src: 'source/js/main.js',
     dest: 'build/js/'
   },
@@ -63,10 +65,10 @@ gulp.task('styles', () =>
     .pipe(plugin.plumber())
     .pipe(plugin.if(isDevelopment, plugin.sourcemaps.init()))
     .pipe(plugin.sass())
-    .pipe(plugin.postcss([
-      autoprefixer(),
+    .pipe(plugin.if(!isDevelopment, plugin.postcss([
+      autoprefixer({ grid: 'autoplace' }),
       cssnano()
-    ]))
+    ])))
     .pipe(plugin.if(isDevelopment, plugin.sourcemaps.write()))
     .pipe(gulp.dest(Paths.sass.dest))
     .pipe(server.stream()));
@@ -103,7 +105,7 @@ gulp.task('img:sprite', () =>
 gulp.task('scripts', () =>
   gulp.src(Paths.js.src)
     .pipe(webpackStream(webpackConfig))
-    .pipe(plugin.uglify())
+    // .pipe(plugin.if(isDevelopment, plugin.uglify()))
     .pipe(gulp.dest(Paths.js.dest)));
 
 
@@ -119,7 +121,7 @@ gulp.task('copy', () =>
 // Server \\
 gulp.task('server', () =>
   server.init({
-    server: "build/",
+    server: 'build/',
     notify: false,
     open: true,
     cors: true,
@@ -136,7 +138,8 @@ gulp.task('server:refresh', (done) => {
 gulp.task('watch', () => {
   gulp.watch(Paths.sass.base, gulp.series('styles'));
   gulp.watch(Paths.img.src, gulp.series('img', 'server:refresh'));
-  gulp.watch(Paths.pug.src, gulp.series('pug', 'server:refresh'));
+  gulp.watch(Paths.pug.base, gulp.series('pug', 'server:refresh'));
+  gulp.watch(Paths.js.base, gulp.series('scripts', 'server:refresh'));
   gulp.watch(Paths.sprite.src, gulp.series('img:sprite', 'pug', 'server:refresh'));
 });
 

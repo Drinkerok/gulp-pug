@@ -1,9 +1,5 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
+@import './_settings/_vars';
+@import './_settings/_mixins';
+@import './_settings/fonts';
+@import './_settings/base';
+@import './_settings/main';
